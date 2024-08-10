@@ -2,6 +2,15 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 
+interface UserPayload {
+  email: string;
+  role: "user" | "superadmin";
+}
+
+interface req extends Request {
+  user?: UserPayload;
+}
+
 export const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -22,9 +31,14 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserProfile = async (req: Request, res: Response) => {
+export const getUserProfile = async (req: req, res: Response) => {
   try {
-    const user = await User.findById(req.user?.userId).select("-password");
+    const email = req.user?.email;
+    if (!email) {
+      return res.status(404).json({ message: "User not found" });
+    } else {
+    }
+    const user = await User.findOne({ email: email }).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

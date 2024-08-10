@@ -3,29 +3,28 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import productRoutes from "./routes/product.routes";
+import cartRoutes from "./routes/cart.routes";
 import connectDB from "./config/db.config";
 
-// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 connectDB();
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
 
-// Define the routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 
-// Handle undefined routes (404)
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route not found" });
 });

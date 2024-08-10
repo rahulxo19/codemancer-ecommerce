@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model";
-import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 
 interface LoginResponse {
   token: string;
